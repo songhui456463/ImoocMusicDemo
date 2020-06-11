@@ -1,9 +1,14 @@
 package com.sh.imoocmusicdemo.views;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.IBinder;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,11 +21,17 @@ import androidx.annotation.RequiresApi;
 import com.bumptech.glide.Glide;
 import com.sh.imoocmusicdemo.R;
 import com.sh.imoocmusicdemo.helps.MediaPlayerHelp;
+import com.sh.imoocmusicdemo.models.MusicModel;
+import com.sh.imoocmusicdemo.service.MusicService;
 
 public class PlayMusicView extends FrameLayout {
 
 
     private Context mContext;
+    private Intent mServiceIntent;
+    private MusicService.MusicBind mMusicBind;
+    private MusicModel mMusicModel;
+
     private View mView;
     private ImageView mIvIcon;
 
@@ -29,10 +40,7 @@ public class PlayMusicView extends FrameLayout {
     private FrameLayout mFlPlayMusic;
     private ImageView mIvNeedle;
     private ImageView mIvPlay;
-    private boolean isPlaying;
-
-    private MediaPlayerHelp mMediaPlayerHelp;
-    private String mPath;
+    private boolean isPlaying,isBindService;
 
 
     public PlayMusicView(Context context) {
@@ -86,46 +94,34 @@ public class PlayMusicView extends FrameLayout {
         mStopNeedleAnim=AnimationUtils.loadAnimation(mContext,R.anim.stop_needle_anim);
         addView(mView);
 
-        mMediaPlayerHelp=MediaPlayerHelp.getInstance(mContext);
     }
 
 
     /**
      * 设置光盘中显示的音乐封面图片
      */
-    public void setMusicIcon(String icon){
+    public void setMusicIcon(){
         Glide.with(mContext)
-                .load(icon)
+                .load(mMusicModel.getPoster())
                 .into(mIvIcon);
+    }
+
+    public void setMusic(MusicModel music){
+        mMusicModel=music;
+        setMusicIcon();
     }
 
     /**
      * 播放音乐
      */
-    public void playMusic(String path){
-        mPath=path;
+    public void playMusic(){
+
         this.isPlaying=true;
         mIvPlay.setVisibility(View.GONE);
         mFlPlayMusic.startAnimation(mPlayMusicAnim);
         mIvNeedle.startAnimation(mPlayNeedleAnim);
 
-        /**
-         * 1.当前的音乐是否已经在播放的音乐
-         * 2.如果当前的音乐是已经在播放的音乐的话，那么就直接执行start方法
-         * 3.如果当前播放的音乐不是当前需要的音乐，那么就调用setPath方法
-         */
-        if(mMediaPlayerHelp.getPath()!=null
-                &&mMediaPlayerHelp.getPath().equals(path)){
-            mMediaPlayerHelp.start();
-        }else {
-            mMediaPlayerHelp.setpath(path);
-            mMediaPlayerHelp.setOnMediaPlayerHelperListener(new MediaPlayerHelp.OnMediaPlayerHelperListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    mediaPlayer.start();
-                }
-            });
-        }
+        startMusicService();
     }
 
     /**
@@ -137,17 +133,93 @@ public class PlayMusicView extends FrameLayout {
         mFlPlayMusic.clearAnimation();
         mIvNeedle.startAnimation(mStopNeedleAnim);
 
-        mMediaPlayerHelp.pause();
+        if(mMusicBind!=null)
+        mMusicBind.stopMusic();
     }
 
     /**
      * 切换播放状态
      */
-    private void trigger(){
+    public void trigger(){
         if(isPlaying){
             stopMusic();
         }else {
-            playMusic(mPath);
+            playMusic();
         }
+    }
+
+    /**
+     * 启动音乐服务
+     */
+    private void startMusicService(){
+        //启动service
+        if(mServiceIntent==null){
+            mServiceIntent=new Intent(mContext, MusicService.class);
+            mContext.startService(mServiceIntent);
+        }else {
+            mMusicBind.playMusic();
+        }
+
+        //绑定 service，当前service未绑定，绑定服务
+        if(!isBindService){
+            isBindService=true;
+            mContext.bindService(mServiceIntent,connection,Context.BIND_AUTO_CREATE);
+        }
+
+    }
+
+    /**
+     * 如果已经绑定了服务,解除绑定
+     */
+    public void destory(){
+        if(isBindService){
+            isBindService=false;
+            mContext.unbindService(connection);
+        }
+    }
+
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mMusicBind= (MusicService.MusicBind) service;
+            mMusicBind.setMusic(mMusicModel);
+            Log.d("play",mMusicModel.toString());
+            mMusicBind.playMusic();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    /**
+     * 获得当前进度
+     */
+    public int getCurrent(){
+        return mMusicBind.getMusicCurrentPosition();
+    }
+
+
+    /**
+     * 获得总进度
+     */
+    public int getToatl(){
+        return mMusicBind.getMusicDuration();
+    }
+
+
+    /**
+     * 切换歌曲
+     */
+    public void setMusicModel(MusicModel musicModel){
+        mMusicBind.setMusic(musicModel);
+    }
+
+    /**
+     * 追到当前进度
+     */
+    public void seek(int position){
+        mMusicBind.seektoCurrent(position);
     }
 }

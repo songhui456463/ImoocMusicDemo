@@ -2,7 +2,7 @@
 <resources>
     <dimen name="navBarHeight">56dp</dimen>
     <dimen name="marginSize">12dp</dimen>
-    <dimen name="navBarTitleSize">22sp</dimen>
+    <dimen name="navBarTitleSize">20sp</dimen>
     <dimen name="titleSize">18sp</dimen>
     <dimen name="infoSize">14sp</dimen>
     <dimen name="inputViewHeight">44dp</dimen>

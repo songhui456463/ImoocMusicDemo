@@ -12,9 +12,10 @@
    <ImageView
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:src="@mipmap/logo"
+       android:src="@mipmap/music"
        android:layout_gravity="center_horizontal"
-       android:layout_marginTop="@dimen/navBarTitleSize"/>
+       android:layout_marginTop="@dimen/navBarTitleSize"
+       android:layout_marginBottom="30dp"/>
 
     <!--自定义控件-->
     <com.sh.imoocmusicdemo.views.InputView
@@ -35,7 +36,7 @@
         android:id="@+id/input_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/inputViewHeight"
-
+        android:layout_marginTop="10dp"
         app:input_icon="@mipmap/password"
         app:input_hint="密码"
         app:is_password="true">
@@ -45,21 +46,52 @@
         style="@style/line"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/marginSize"
-        android:text="立即注册"
-        android:layout_gravity="center_horizontal"
-        android:textSize="@dimen/infoSize"
-        android:textColor="@color/mainColor"
-        android:layout_marginTop="@dimen/marginSize"
-        android:onClick="onRegisterClick"/>
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:onClick="onCommitClick"
+        android:src="@mipmap/enter"/>
 
-    <Button
-        style="@style/commitBtn"
-        android:text="登   录"
-        android:layout_marginTop="@dimen/marginSize"
-        android:onClick="onCommitClick"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="45dp"
+        android:layout_marginTop="40dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_forget"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:text="忘记密码"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:onClick="onChangePwd"/>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_dark"/>
+
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:text="用户注册"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:onClick="onRegisterClick"/>
+
+    </LinearLayout>
 
 </LinearLayout>

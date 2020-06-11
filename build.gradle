@@ -2,21 +2,31 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        // 添加阿里云 maven 地址
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        maven { url "http://mvn.mob.com/android" }
         google()
         jcenter()
         
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
-        
+        classpath "io.realm:realm-gradle-plugin:6.0.2"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        // 注册MobSDK
+        classpath "com.mob.sdk:MobSDK:2018.0319.1724"
     }
 }
 
 allprojects {
     repositories {
+        // 添加阿里云 maven 地址
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        maven { url "https://jitpack.io" }
         mavenCentral()
         google()
         jcenter()

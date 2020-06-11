@@ -86,4 +86,10 @@ public class InputView  extends FrameLayout {
         return mEtInput.getText().toString().trim();
     }
 
+    /**
+     * 注册返回給phone的edittext赋值
+     */
+    public void setphoneedittext(String phone){
+        mEtInput.setText(phone);
+    }
 }

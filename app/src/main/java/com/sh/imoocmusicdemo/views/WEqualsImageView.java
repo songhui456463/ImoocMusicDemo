@@ -2,7 +2,6 @@ package com.sh.imoocmusicdemo.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 

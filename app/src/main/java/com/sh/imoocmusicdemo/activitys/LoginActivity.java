@@ -2,9 +2,11 @@ package com.sh.imoocmusicdemo.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.sh.imoocmusicdemo.R;
+import com.sh.imoocmusicdemo.utils.UserUtils;
 import com.sh.imoocmusicdemo.views.InputView;
 
 //navigationbar
@@ -41,6 +43,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     /**
+     * 跳转修改密码点击事件
+     */
+    public void onChangePwd(View view){
+        Intent intent=new Intent(this,LoginCPwdActivity.class);
+        startActivity(intent);
+    }
+
+
+    /**
      * 登录
      */
     public void onCommitClick(View view){
@@ -51,13 +62,26 @@ public class LoginActivity extends BaseActivity {
 //        Log.d("LoginActivity",password);
 
         //验证用户输入是否合法
-//        if(!UserUtils.validateLogin(this,phone,password)){
-//            return;
-//        }
+        if(!UserUtils.validateLogin(this,phone,password)){
+            return;
+        }
 
         //跳转到应用主页
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
         finish();
+
     }
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch(requestCode){
+//            case 1:
+//                String phone=data.getStringExtra("registephone");
+//                Log.d("LoginActivity",phone);
+//                mInputPhone.setphoneedittext(phone);
+//                break;
+//        }
+//    }
 }

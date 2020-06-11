@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.sh.imoocmusicdemo.R;
+import com.sh.imoocmusicdemo.utils.UserUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -41,33 +42,31 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
         handler.postDelayed(runnable=new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(WelcomeActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                onCheckUser();
             }
         },5000);
 
 
+//        new Thread();
+
 //        init();
     }
 
-    private void init(){
-        mTimer=new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                //主线程
-//                Log.e("WelcomeActivity","当前线程为:" +Thread.currentThread());
-//                toMain();
-                toLogin();
-            }
-        },1000);     //延迟3秒执行run
-    }
+//    private void init(){
+//        mTimer=new Timer();
+//        mTimer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                //主线程
+////                Log.e("WelcomeActivity","当前线程为:" +Thread.currentThread());
+////                toMain();
+//                toLogin();
+//            }
+//        },1000);     //延迟3秒执行run
+//    }
 
 
     //  /**+enter
-
-
     /**
      *跳转到MainActivity
      */
@@ -119,14 +118,21 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv:
-                Intent intent=new Intent(this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                onCheckUser();
                 if (runnable != null) {
                     handler.removeCallbacks(runnable);
                 }
         }
     }
 
+
+    private void onCheckUser(){
+        final boolean isLogin = UserUtils.validateUserLogin(this);
+        if (isLogin){
+            toMain();
+        }else {
+            toLogin();
+        }
+    }
 
 }

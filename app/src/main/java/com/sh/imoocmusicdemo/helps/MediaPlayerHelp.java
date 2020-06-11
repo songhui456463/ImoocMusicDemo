@@ -3,8 +3,13 @@ package com.sh.imoocmusicdemo.helps;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-
 import java.io.IOException;
+
+/**
+ * 1.直接在activity中创建播放音乐，音乐与activity绑定，activity运行时播放音乐，activity退出时音乐就会停止
+ * 2.通过全局单例类与application绑定，application运行时播放音乐，application退出时音乐就会停止
+ * 3.通过service进行音乐播放，service运行时播放音乐，service退出时音乐就会停止
+ */
 
 public class MediaPlayerHelp  {
 
@@ -50,16 +55,18 @@ public class MediaPlayerHelp  {
      */
     public void setpath(String path){
         /**
-         * 1.音乐正在播放。重置音乐播放状态
+         * 1.音乐正在播放，或者切换了音乐。重置音乐播放状态
          * 2.设置播放音乐路径
          * 3.准备播放
          */
-        //1.
-        mPath=path;
-        if(mMediaPlayer.isPlaying()){
+        //当音乐正在切换的时候，音乐处于播放状态，那我们重置音乐播放状态
+        //如果音乐没有处于播放状态，那我们不重置音乐播放状态
+
+        if(mMediaPlayer.isPlaying()||!path.equals(mPath)){
             mMediaPlayer.reset();
         }
 
+        mPath=path;
         //2.
         try {
             mMediaPlayer.setDataSource(mContext, Uri.parse(path));
@@ -73,6 +80,15 @@ public class MediaPlayerHelp  {
             public void onPrepared(MediaPlayer mp) {
                 if(onMediaPlayerHelperListener!=null){
                     onMediaPlayerHelperListener.onPrepared(mp);
+                }
+            }
+        });
+        //监听音乐播放完成
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if(onMediaPlayerHelperListener!=null){
+                    onMediaPlayerHelperListener.onCompletion(mp);
                 }
             }
         });
@@ -99,7 +115,55 @@ public class MediaPlayerHelp  {
 
     public interface OnMediaPlayerHelperListener{
         void onPrepared(MediaPlayer mediaPlayer);
+        void onCompletion(MediaPlayer mp);
     }
 
+    //获取歌曲长度
+    public int getMusicDuration()
+    {
+        int rtn = 0;
+        if (mMediaPlayer != null)
+        {
+            rtn = mMediaPlayer.getDuration();
+        }
+
+        return rtn;
+    }
+
+    //获取当前播放进度
+    public int getMusicCurrentPosition()
+    {
+        int rtn = 0;
+        if (mMediaPlayer != null)
+        {
+            rtn = mMediaPlayer.getCurrentPosition();
+
+        }
+
+        return rtn;
+    }
+
+    /**
+     * 更新进度
+     * @param position
+     */
+    public void seekTo(int position)
+    {
+        if (mMediaPlayer != null)
+        {
+            mMediaPlayer.seekTo(position);
+        }
+    }
+
+    /**
+     * 音乐停止播放
+     */
+    public void stopPlaying() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+    }
 
 }

@@ -11,50 +11,132 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/img1"/>
+        />
 
-    <com.sh.imoocmusicdemo.views.PlayMusicView
-        android:id="@+id/play_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-    </com.sh.imoocmusicdemo.views.PlayMusicView>
-
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/no_bar_back"
-        android:layout_margin="@dimen/marginSize"
-        android:onClick="onBackClick"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="480dp">
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/no_bar_back"
+            android:layout_margin="@dimen/marginSize"
+            android:onClick="onBackClick"/>
 
         <TextView
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="音乐名称"
             android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/iv_back"
             android:textStyle="bold"
             android:textSize="@dimen/titleSize"
             />
 
         <TextView
+            android:id="@+id/tv_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="作者"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="@dimen/titleSize"
-            android:layout_marginTop="@dimen/marginSize"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/iv_back"
+            android:layout_below="@id/tv_name"
             />
+    </RelativeLayout>
+    
+    
+    
+    <com.sh.imoocmusicdemo.views.PlayMusicView
+        android:id="@+id/play_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        >
+    </com.sh.imoocmusicdemo.views.PlayMusicView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="550dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/listen_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:textSize="15sp"
+            android:text="00:00" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:secondaryProgress="20"
+            android:splitTrack="false"
+            android:maxHeight="5dip"
+            android:progressDrawable="@drawable/video_seekbar_progress"
+            android:thumb="@drawable/progress"
+            />
+        <TextView
+            android:id="@+id/listen_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:textSize="15sp"
+            android:text="03:53" />
 
     </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="600dp"
+        android:paddingLeft="@dimen/marginSize"
+        android:paddingRight="@dimen/marginSize">
+
+
+        <ImageView
+            android:id="@+id/iv_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/prev"
+            android:layout_marginLeft="55dp"
+            android:layout_gravity="left|center_vertical"
+            android:onClick="prev"/>
+
+         <ImageView
+             android:id="@+id/iv_pasue"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@mipmap/pause"
+             android:layout_gravity="center"
+             android:onClick="pause"/>
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="55dp"
+            android:src="@mipmap/next"
+            android:layout_gravity="right|center_vertical"
+            android:onClick="next"/>
+
+    </FrameLayout>
+
 
 </FrameLayout>
